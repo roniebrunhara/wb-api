@@ -1,10 +1,13 @@
 package br.com.roniebrunhara.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +18,15 @@ public class ScrapingUtil {
 	
 	private static final String BASE_URL = "https://www.google.com/search?q=";
 	private static final String COMPLEMENTO = "&hl=pt-BR";
+	private static final String CASA = "casa";
+	private static final String VISITANTE = "visitante";
 	
 	public static void main(String[] args) {
 		String vaiAcontecer = "vasco+x+flamengo+05/03/23";
 		String jogoEncerrado = "palmeiras+x+corinthians+08/08/2020"; 
-		String url = BASE_URL+vaiAcontecer+COMPLEMENTO;
+		String jogoBrasil = "brasil+x+bolivia+10/10/20";
+		String jogoInterGremio = "internacional+x+gremio+03/10/2020";
+		String url = BASE_URL+jogoInterGremio+COMPLEMENTO;
 		ScrapingUtil scraping = new ScrapingUtil();
 		scraping.obtemInfoPartida(url);
 	}
@@ -37,6 +44,23 @@ public class ScrapingUtil {
 			if(statusPartida != StatusPartida.PARTIDA_NAO_INICIADA) {
 				String tempoPartida = obtemTempoPartida(document);
 				LOGGER.info("Tempo Partida: {}",tempoPartida);
+				
+				Integer placarEquipeCasa = recuperaPlacarEquipeCasa(document);
+				LOGGER.info("placar Equipe Casa: {}",placarEquipeCasa);
+				
+				Integer placarEquipeVisitante = recuperaPlacarEquipeVisitante(document);
+				LOGGER.info("placar Equipe Visitante: {}",placarEquipeVisitante);
+				
+				String golsEquipeCasa = recuperaGolsEquipeCasa(document);
+				LOGGER.info("Gols Equipe casa: {}",golsEquipeCasa);
+				
+				String golsEquipeVisitante = recuperaGolsEquipeVisitante(document);
+				LOGGER.info("Gols Equipe visitante: {}",golsEquipeVisitante);
+				
+				Integer placaEstendidoCasa      = buscaPenalidades(document,CASA);
+				LOGGER.info("Placar estendido Equipe casa: {}",placaEstendidoCasa);
+				Integer placaEstendidoVisitante = buscaPenalidades(document,VISITANTE);
+				LOGGER.info("Placar estendido Equipe visitante: {}",placaEstendidoVisitante);
 			}
 			
 			String nomeEquipeCasa = recuperaNomeEquipeCasa(document);
@@ -138,5 +162,63 @@ public class ScrapingUtil {
 		Element element = document.selectFirst("div[class=imso_mh__second-tn-ed imso_mh__tnal-cont imso-tnol]");
 		String urlLogo = element.select("img[class=imso_btl__mh-logo]").attr("src");
 		return urlLogo;
+	}
+	
+	public Integer recuperaPlacarEquipeCasa(Document document) {
+		String placarEquipe = document.selectFirst("div[class=imso_mh__l-tm-sc imso_mh__scr-it imso-light-font]").text();
+		return formataPlacarStringToInteger(placarEquipe);
+	}
+	
+	public Integer recuperaPlacarEquipeVisitante(Document document) {
+		String placarEquipe = document.selectFirst("div[class=imso_mh__r-tm-sc imso_mh__scr-it imso-light-font]").text();
+		return formataPlacarStringToInteger(placarEquipe);
+	}
+	
+	public String recuperaGolsEquipeCasa(Document document) {
+		List<String> golsEquipe = new ArrayList<>();
+		Elements elements = document.select("div[class=imso_gs__tgs imso_gs__left-team]")
+				.select("div[class=imso_gs__gs-r]");
+		
+		for(Element e : elements) {
+			String infoGol = e.select("div[class=imso_gs__gs-r]").text();
+			golsEquipe.add(infoGol);
+		}
+		return String.join(", ", golsEquipe);
+	}
+	
+	public String recuperaGolsEquipeVisitante(Document document) {
+		List<String> golsEquipe = new ArrayList<>();
+		Elements elements = document.select("div[class=imso_gs__tgs imso_gs__right-team]")
+				.select("div[class=imso_gs__gs-r]");
+		
+		elements.forEach(e ->{
+			String infoGol = e.select("div[class=imso_gs__gs-r]").text();
+			golsEquipe.add(infoGol);
+		});
+			
+		
+		return String.join(", ", golsEquipe);
+	}
+	
+	public Integer buscaPenalidades(Document document, String tipoEquipe) {
+		boolean isPenalidades = document.select("div[class=imso_mh_s__psn-sc]").isEmpty();
+		if(!isPenalidades) {
+			String penalidades = document.select("div[class=imso_mh_s__psn-sc]").text();
+			String penalidadeCompleta = penalidades.substring(0,5).replace(" ", "");
+			String[] divisao = penalidadeCompleta.split("-");
+			return CASA.equals(tipoEquipe)?formataPlacarStringToInteger(divisao[0]):formataPlacarStringToInteger(divisao[1]);
+		}
+		
+		return null;
+	}
+	
+	public Integer formataPlacarStringToInteger(String placar) {
+		Integer valor;
+		try {
+			valor = Integer.parseInt(placar);
+		} catch (Exception e) {
+			valor = 0;
+		}
+		return valor;
 	}
 }
