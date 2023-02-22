@@ -39,7 +39,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<StandardError> notFoundException(NotFoundException e, HttpServletRequest request){
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body(new StandardError(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI()));
-		
+		 
 	}
 	
 	@ExceptionHandler(InternalServerErrorException.class)
