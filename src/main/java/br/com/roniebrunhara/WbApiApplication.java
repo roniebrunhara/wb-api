@@ -1,4 +1,4 @@
-package br.com.roniebrunhara.wbapi;
+package br.com.roniebrunhara;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
