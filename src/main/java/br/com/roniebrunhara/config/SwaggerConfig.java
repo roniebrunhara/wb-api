@@ -23,7 +23,7 @@ public class SwaggerConfig {
 	private static final String API_VERSAO = "1.0.0";
 	private static final String CONTATO_NOME = "Ronie Brunhara";
 	private static final String CONTATO_GITHUB = "https://github.com/roniebrunhara";
-	private static final String CONTATO_EMAIL = "";
+	private static final String CONTATO_EMAIL = "testeA@aaaa.com";
 	
 	@Bean
 	public Docket webApi() {
@@ -39,7 +39,7 @@ public class SwaggerConfig {
 		return new ApiInfoBuilder()
 				.title(API_TITULO)
 				.description(API_DESCRICAO)
-				.version(API_DESCRICAO)
+				.version(API_VERSAO)
 				.contact(new Contact(CONTATO_NOME,CONTATO_GITHUB,CONTATO_EMAIL))
 				.build();
 	}
