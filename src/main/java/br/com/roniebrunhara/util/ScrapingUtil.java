@@ -220,7 +220,21 @@ public class ScrapingUtil {
 		return valor;
 	}
 	
-	public String montarUrlGoogle(String nomeEquipeCasa,String nomeEquipeVisitante,String data) {
+	public String montarUrlGoogle(String nomeEquipeCasa,String nomeEquipeVisitante) {
+		try {
+			String equipeCasa = nomeEquipeCasa.replace(" ","+").replace("-", "+");
+			String equipeVisitante = nomeEquipeVisitante.replace(" ","+").replace("-", "+");
+			
+			return BASE_URL+equipeCasa+"+x+"+equipeVisitante+COMPLEMENTO;
+			
+		}catch (Exception e) {
+			LOGGER.error("Error: {} ",e.getMessage());
+		}
+		
+		return null;
+	}
+	
+	public String montarUrlGoogleComData(String nomeEquipeCasa,String nomeEquipeVisitante,String data) {
 		try {
 			String equipeCasa = nomeEquipeCasa.replace(" ","+").replace("-", "+");
 			String equipeVisitante = nomeEquipeVisitante.replace(" ","+").replace("-", "+");

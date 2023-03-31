@@ -23,7 +23,7 @@ public class PartidaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NotBlank
-	private String nomeEquipe;
+	private String nomeEquipeCasa;
 	
 	@NotBlank
 	private String nomeEquipeVisitante;
