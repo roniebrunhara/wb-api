@@ -24,7 +24,7 @@ public class PartidaTask {
 	@Autowired
 	private ScrapingService scrapingService;
 	
-	//Teste
+	//Habilitando todos os dias
 	@Scheduled(cron="0/30 * 19-23 * * MON-FRI", zone = TIME_ZONE)
 	public void taskPartidaTercaFeira() {
 		inicializaAgendamento("taskPartidaTercaFeira()");
@@ -63,6 +63,4 @@ public class PartidaTask {
 	private void gravaLogInfo(String mensagem) {
 		LOGGER.info(mensagem);
 	}
-	
-	
 }
