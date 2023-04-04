@@ -2,6 +2,7 @@ package br.com.roniebrunhara.dto;
 
 import java.io.Serializable;
 
+import br.com.roniebrunhara.util.StatusPartida;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.Setter;
 public class PartidaGoogleDTO implements Serializable{
 	private static final long serialVersionUID = 1;
 	
-	private String statusPartida;
+	private StatusPartida statusPartida;
 	private String tempoPartida;
 	
 	//Informações da equipe CASA

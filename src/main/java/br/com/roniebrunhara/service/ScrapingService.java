@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.roniebrunhara.dto.PartidaGoogleDTO;
 import br.com.roniebrunhara.entity.Partida;
 import br.com.roniebrunhara.util.ScrapingUtil;
+import br.com.roniebrunhara.util.StatusPartida;
 //Verificar hibernate nao esta criando as tabelas
 @Service
 public class ScrapingService {
@@ -31,7 +32,9 @@ public class ScrapingService {
 						partida.getEquipeVisitante().getNomeEquipe());
 				
 				PartidaGoogleDTO partidaGoogle = scrapingUtil.obtemInfoPartida(urlPartida);
-				partidaService.atualizaPartida(partida,partidaGoogle);
+				if(partidaGoogle.getStatusPartida() != StatusPartida.PARTIDA_NAO_INICIADA) {
+					partidaService.atualizaPartida(partida,partidaGoogle);
+				}
 			});
 		}
 	}

@@ -51,7 +51,7 @@ public class ScrapingUtil {
 			LOGGER.info("Titulo da pagina: {}",title);
 			StatusPartida statusPartida = obtemStatusPartida(document);
 			LOGGER.info("Status Partida: {}",statusPartida.toString());
-			partidaGoogle.setStatusPartida(statusPartida.toString());
+			partidaGoogle.setStatusPartida(statusPartida);
 			
 			if(statusPartida != StatusPartida.PARTIDA_NAO_INICIADA) {
 				String tempoPartida = obtemTempoPartida(document);
