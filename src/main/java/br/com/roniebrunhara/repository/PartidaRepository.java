@@ -12,12 +12,12 @@ import br.com.roniebrunhara.entity.Partida;
 public interface PartidaRepository extends JpaRepository<Partida, Long> {
 
 	@Query(name="listar_partidas_periodo", 
-			value="SELECT * FROM PARTIDA P WHERE P.DATA_HORA_PARTIDA BETWEEN NOW() - INTERVAL 3 HOUR AND NOW() AND P.TEMPO_PARTIDA AND IFNULL(P.TEMPO_PARTIDA,'Vazio') != 'Encerrado'", 
+			value="SELECT * FROM PARTIDA P WHERE P.DATA_HORA_PARTIDA BETWEEN NOW() - INTERVAL 3 HOUR AND NOW() AND IFNULL(P.TEMPO_PARTIDA,'Vazio') != 'Encerrado'", 
 			nativeQuery = true)
 	public List<Partida> listarPartidasPeriodo();
 
 	@Query(name="buscar_quantidade_partidas_periodo", 
-			value="SELECT COUNT(*) FROM PARTIDA P WHERE P.DATA_HORA_PARTIDA BETWEEN NOW() - INTERVAL 3 HOUR AND NOW() AND P.TEMPO_PARTIDA AND IFNULL(P.TEMPO_PARTIDA,'Vazio') != 'Encerrado'", 
+			value="SELECT COUNT(*) FROM PARTIDA P WHERE P.DATA_HORA_PARTIDA BETWEEN NOW() - INTERVAL 3 HOUR AND NOW() AND IFNULL(P.TEMPO_PARTIDA,'Vazio') != 'Encerrado'", 
 			nativeQuery = true)
 	public Integer buscarQuantidadePartidasPeriodo();
 
